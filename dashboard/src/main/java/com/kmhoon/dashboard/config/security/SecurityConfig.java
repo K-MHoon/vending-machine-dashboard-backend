@@ -1,5 +1,7 @@
-package com.kmhoon.dashboard.config;
+package com.kmhoon.dashboard.config.security;
 
+import com.kmhoon.dashboard.security.jwt.JwtAuthenticationDeniedHandler;
+import com.kmhoon.dashboard.security.jwt.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtAuthenticationEntryPoint entryPoint;
+    private final JwtAuthenticationDeniedHandler deniedHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -34,6 +39,7 @@ public class SecurityConfig {
                 .cors(config -> config.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(entryPoint).accessDeniedHandler(deniedHandler))
                 .formLogin(config -> {
                     config.loginPage("/api/user/login");
                 })
