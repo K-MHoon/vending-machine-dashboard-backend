@@ -1,6 +1,6 @@
 package com.kmhoon.dashboard.security.jwt;
 
-import com.kmhoon.dashboard.security.login.UserDto;
+import com.kmhoon.dashboard.security.login.UserInfo;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class JwtTokenProvider {
 
         Date accessTokenExpiresIn = new Date(now + jwtTime.getAccessTokenTime());
 
-        UserDto userDto = (UserDto)authentication.getPrincipal();
+        UserInfo userDto = (UserInfo)authentication.getPrincipal();
 
         String accessToken = Jwts.builder()
                 .claim("email", userDto.getEmail())
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        UserDto user = new UserDto(claims.get("email").toString(), claims.get("name").toString(), "", authorities);
+        UserInfo user = new UserInfo(claims.get("email").toString(), claims.get("name").toString(), "", authorities);
         return new JwtAuthentication(user, "", authorities);
     }
 
