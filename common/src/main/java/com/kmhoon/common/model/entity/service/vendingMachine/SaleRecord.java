@@ -1,4 +1,4 @@
-package com.kmhoon.common.model.entity.service;
+package com.kmhoon.common.model.entity.service.vendingMachine;
 
 import com.kmhoon.common.enums.PaymentMethod;
 import jakarta.persistence.*;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class SoldHistory {
+public class SaleRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +33,5 @@ public class SoldHistory {
     private PaymentMethod paymentMethod;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private VendingMachineItemMap vendingMachineItemMap;
+    private VendingMachineProductMap vendingMachineItemMap;
 }
