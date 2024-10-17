@@ -49,6 +49,13 @@ public class VendingMachine extends BaseEntity {
     @Comment("주소")
     private String address;
 
+    @Comment("사용여부")
+    private Boolean isUse;
+
+    @Comment("삭제여부")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private Boolean isDelete;
+
     @Enumerated(EnumType.STRING)
     @Comment("자판기상태")
     private VendingMachineStatus status;
@@ -94,5 +101,20 @@ public class VendingMachine extends BaseEntity {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public void updateAll(String code, String name, double locationX, double locationY, String address, Boolean isUse, VendingMachineStatus status, List<VendingMachineType> vendingMachineTypeList, Vendor vendor, Engineer engineer, DeliveryMan deliveryMan, LocalDate nextInspectionDate) {
+        this.code = code;
+        this.name = name;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.address = address;
+        this.isUse = isUse;
+        this.status = status;
+        this.vendingMachineTypeList = vendingMachineTypeList;
+        this.vendor = vendor;
+        this.engineer = engineer;
+        this.deliveryMan = deliveryMan;
+        this.nextInspectionDate = nextInspectionDate;
     }
 }

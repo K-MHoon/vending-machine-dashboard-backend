@@ -22,17 +22,20 @@ public final class CreateVendingMachineRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
-    private String locationX;
+    @NotNull
+    private Double locationX;
 
-    @NotBlank
-    private String locationY;
+    @NotNull
+    private Double locationY;
 
     @NotBlank
     private String address;
 
     @NotNull
     private VendingMachineStatus status;
+
+    @NotNull
+    private Boolean isUse;
 
     @NotNull
     @UniqueElements

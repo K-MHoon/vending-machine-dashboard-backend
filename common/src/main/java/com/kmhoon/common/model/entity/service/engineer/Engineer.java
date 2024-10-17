@@ -1,7 +1,7 @@
-package com.kmhoon.common.model.entity.service;
+package com.kmhoon.common.model.entity.service.engineer;
 
-import com.kmhoon.common.model.entity.BaseEntity;
-import com.kmhoon.common.model.entity.auth.user.User;
+
+import com.kmhoon.common.model.entity.service.vendor.Vendor;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -10,40 +10,37 @@ import org.hibernate.proxy.HibernateProxy;
 import java.util.Objects;
 
 /**
- * 자판기 엔티티
+ * 자판기 수리기사 엔티티
  */
 @Entity
-@Table(name = "tb_service_vending_machine")
+@Table(name = "tb_service_engineer")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class VendingMachine extends BaseEntity {
+public class Engineer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sequence;
 
-    @Comment("자판기코드")
-    @Column(unique = true)
-    private String code;
-
     @Comment("이름")
     private String name;
 
-    @Comment("X좌표")
-    private double locationX;
+    @Comment("전화번호")
+    private String phoneNumber;
 
-    @Comment("Y좌표")
-    private double locationY;
+    @Comment("비고")
+    @Column(columnDefinition = "TEXT")
+    private String note;
 
-    @Comment("주소")
-    private String address;
+    @Comment("사용여부")
+    private boolean isUse;
 
-    @Comment("자판기 관리자")
+    @Comment("소속회사")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_seq")
-    private User manager;
+    @JoinColumn(name = "vendor_seq")
+    private Vendor vendor;
 
     @Override
     public final boolean equals(Object o) {
@@ -52,8 +49,8 @@ public class VendingMachine extends BaseEntity {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        VendingMachine that = (VendingMachine) o;
-        return getSequence() != null && Objects.equals(getSequence(), that.getSequence());
+        Engineer engineer = (Engineer) o;
+        return getSequence() != null && Objects.equals(getSequence(), engineer.getSequence());
     }
 
     @Override
