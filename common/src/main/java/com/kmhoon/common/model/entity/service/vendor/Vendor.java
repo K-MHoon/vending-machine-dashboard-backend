@@ -32,7 +32,7 @@ public class Vendor {
     private String address;
 
     @Comment("사용여부")
-    private boolean isUse;
+    private Boolean isUse;
 
     @Override
     public final boolean equals(Object o) {
@@ -48,5 +48,12 @@ public class Vendor {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public void updateAll(String name, String phoneNumber, String address, Boolean isUse) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.isUse = isUse;
     }
 }
