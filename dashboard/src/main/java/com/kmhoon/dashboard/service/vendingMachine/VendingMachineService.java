@@ -62,7 +62,7 @@ public class VendingMachineService {
 
     @Transactional
     public void updateVendingMachine(UpdateVendingMachineRequest request) {
-        VendingMachine vendingMachine = vendingMachineRepository.findById(request.getSeq()).orElseThrow(() -> new DashboardApiException(VENDING_MACHINE_NOT_FOUND));
+        VendingMachine vendingMachine = getVendingMachineBySeq(request.getSeq());
 
         if(!vendingMachine.getCode().equals(request.getCode()) && vendingMachineRepository.existsByCodeAndIsDeleteIsFalse(request.getCode())) {
             throw new DashboardApiException(CODE_EXISTED);
@@ -82,20 +82,30 @@ public class VendingMachineService {
                 getNextInspectionDate(request.getNextInspectionDate()));
     }
 
+    private VendingMachine getVendingMachineBySeq(Long seq) {
+        return vendingMachineRepository.findBySequenceAndIsDeleteIsFalse(seq).orElseThrow(() -> new DashboardApiException(VENDING_MACHINE_NOT_FOUND));
+    }
+
+    @Transactional
+    public void deleteVendingMachine(Long seq) {
+        VendingMachine vendingMachine = getVendingMachineBySeq(seq);
+        vendingMachine.delete();
+    }
+
     private static LocalDate getNextInspectionDate(String request) {
         return DateTimeUtil.strToLocalDate(request);
     }
 
-    private DeliveryMan getDeliveryMan(Long request) {
-        return Objects.isNull(request) ? null : deliveryManRepository.findById(request).orElseThrow(() -> new DashboardApiException(DELIVERY_MAN_SEQ_NOT_FOUND));
+    private DeliveryMan getDeliveryMan(Long seq) {
+        return Objects.isNull(seq) ? null : deliveryManRepository.findById(seq).orElseThrow(() -> new DashboardApiException(DELIVERY_MAN_SEQ_NOT_FOUND));
     }
 
-    private Engineer getEngineer(Long request) {
-        return Objects.isNull(request) ? null : engineerRepository.findById(request).orElseThrow(() -> new DashboardApiException(ENGINEER_SEQ_NOT_FOUND));
+    private Engineer getEngineer(Long seq) {
+        return Objects.isNull(seq) ? null : engineerRepository.findById(seq).orElseThrow(() -> new DashboardApiException(ENGINEER_SEQ_NOT_FOUND));
     }
 
-    private Vendor getVendor(Long request) {
-        return Objects.isNull(request) ? null : vendorRepository.findById(request).orElseThrow(() -> new DashboardApiException(VENDOR_SEQ_NOT_FOUND));
+    private Vendor getVendor(Long seq) {
+        return Objects.isNull(seq) ? null : vendorRepository.findById(seq).orElseThrow(() -> new DashboardApiException(VENDOR_SEQ_NOT_FOUND));
     }
 
 }
