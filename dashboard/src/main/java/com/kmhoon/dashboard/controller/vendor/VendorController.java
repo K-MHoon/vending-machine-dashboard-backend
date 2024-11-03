@@ -2,6 +2,7 @@ package com.kmhoon.dashboard.controller.vendor;
 
 import com.kmhoon.common.model.dto.service.vendingMachine.CreateVendingMachineRequest;
 import com.kmhoon.common.model.dto.service.vendor.CreateVendorRequest;
+import com.kmhoon.common.model.dto.service.vendor.UpdateVendorRequest;
 import com.kmhoon.dashboard.service.vendor.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,4 +22,9 @@ public class VendorController {
         service.createVendor(request);
     }
 
+    @PutMapping("/vendor")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateVendor(@RequestBody @Validated UpdateVendorRequest request) {
+        service.updateVendor(request);
+    }
 }
