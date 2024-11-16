@@ -35,7 +35,7 @@ public class Engineer {
     private String note;
 
     @Comment("사용여부")
-    private boolean isUse;
+    private Boolean isUse;
 
     @Comment("소속회사")
     @ManyToOne(fetch = FetchType.LAZY)

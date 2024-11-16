@@ -117,4 +117,8 @@ public class VendingMachine extends BaseEntity {
         this.deliveryMan = deliveryMan;
         this.nextInspectionDate = nextInspectionDate;
     }
+
+    public void delete() {
+        this.isDelete = Boolean.TRUE;
+    }
 }

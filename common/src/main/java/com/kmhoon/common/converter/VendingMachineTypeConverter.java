@@ -26,7 +26,7 @@ public class VendingMachineTypeConverter implements AttributeConverter<List<Vend
     @Override
     public List<VendingMachineType> convertToEntityAttribute(String dbData) {
         if (dbData == null || dbData.isEmpty()) {
-            return Arrays.asList();
+            return List.of();
         }
         return Arrays.stream(dbData.split(SEPARATOR))
                 .map(VendingMachineType::valueOf)
