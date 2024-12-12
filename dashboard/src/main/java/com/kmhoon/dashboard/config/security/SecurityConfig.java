@@ -2,6 +2,8 @@ package com.kmhoon.dashboard.config.security;
 
 import com.kmhoon.dashboard.security.jwt.JwtAuthenticationDeniedHandler;
 import com.kmhoon.dashboard.security.jwt.JwtAuthenticationEntryPoint;
+import com.kmhoon.dashboard.security.login.LoginFailureHandler;
+import com.kmhoon.dashboard.security.login.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint entryPoint;
     private final JwtAuthenticationDeniedHandler deniedHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,15 +44,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(configurer -> configurer.authenticationEntryPoint(entryPoint).accessDeniedHandler(deniedHandler))
-                .formLogin(config -> {
-                    config.loginPage("/api/user/login");
-                })
                 .authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/api/user/**", "/api/view/**").permitAll()
                         .requestMatchers("/api/service/**").hasRole("USER")
                         .requestMatchers("/api/manager/**").hasRole("MANAGER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
+                .formLogin(config -> {
+                    config.loginPage("/api/user/login")
+                            .usernameParameter("email")
+                            .passwordParameter("password")
+                            .successHandler(loginSuccessHandler)
+                            .failureHandler(loginFailureHandler);
+                })
                 .build();
     }
 
