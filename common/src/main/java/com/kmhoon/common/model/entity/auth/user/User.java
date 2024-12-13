@@ -1,6 +1,7 @@
 package com.kmhoon.common.model.entity.auth.user;
 
 import com.kmhoon.common.model.entity.auth.map.UserRole;
+import com.kmhoon.common.model.entity.service.group.ManagerGroup;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -47,6 +48,10 @@ public class User {
     @Builder.Default
     @Comment("잠김여부")
     private Boolean isLock = Boolean.FALSE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_seq")
+    private ManagerGroup managerGroup;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
