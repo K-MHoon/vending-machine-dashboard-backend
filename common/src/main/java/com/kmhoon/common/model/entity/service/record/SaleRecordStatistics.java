@@ -1,5 +1,6 @@
 package com.kmhoon.common.model.entity.service.record;
 
+import com.kmhoon.common.model.entity.service.group.ManagerGroup;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -29,4 +30,8 @@ public class SaleRecordStatistics {
 
     @Comment("전월대비매출증감율")
     private Double mom;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manger_group_seq")
+    private ManagerGroup managerGroup;
 }
