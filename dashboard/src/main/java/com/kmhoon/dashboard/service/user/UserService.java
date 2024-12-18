@@ -8,13 +8,15 @@ import com.kmhoon.common.model.entity.auth.user.User;
 import com.kmhoon.common.repository.auth.map.UserRoleRepository;
 import com.kmhoon.common.repository.auth.role.RoleRepository;
 import com.kmhoon.common.repository.auth.user.UserRepository;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
+import com.kmhoon.dashboard.exception.DashboardApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.kmhoon.dashboard.exception.service.user.UserException.ALREADY_CREATED_EMAIL;
+import static com.kmhoon.dashboard.exception.service.user.UserException.ROLE_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -27,9 +29,9 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
 
     @Transactional
-    public void register(CreateUserRequest request) {
+    public void register(CreateUserRequest request) throws DashboardApiException {
         if(userRepository.existsByEmail(request.getEmail())) {
-            throw new EntityExistsException("User with email already exists");
+            throw new DashboardApiException(ALREADY_CREATED_EMAIL);
         }
 
         User user = User.builder()
@@ -43,7 +45,7 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        Role role = roleRepository.findByNameAndIsUseIsTrue(RoleType.USER).orElseThrow(EntityNotFoundException::new);
+        Role role = roleRepository.findByNameAndIsUseIsTrue(RoleType.USER).orElseThrow(() -> new DashboardApiException(ROLE_NOT_FOUND));
 
         UserRole userRole = UserRole.builder()
                 .role(role)
