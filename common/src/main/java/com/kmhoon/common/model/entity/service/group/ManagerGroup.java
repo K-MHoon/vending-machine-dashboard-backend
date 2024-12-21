@@ -38,6 +38,7 @@ public class ManagerGroup {
     private Boolean isUse;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "managerGroup")
+    @Builder.Default
     private List<User> userList = new ArrayList<>();
 
     @Comment("그룹등급")

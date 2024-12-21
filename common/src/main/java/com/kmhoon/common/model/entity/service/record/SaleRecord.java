@@ -39,4 +39,8 @@ public class SaleRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vending_machine_item_map_seq")
     private VendingMachineProductMap vendingMachineItemMap;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sale_record_statistics_seq")
+    private SaleRecordStatistics saleRecordStatistics;
 }

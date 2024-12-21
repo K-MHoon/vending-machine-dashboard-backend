@@ -26,7 +26,7 @@ public class SaleRecordStatistics {
     private LocalDate reportDate;
 
     @Comment("전체매출")
-    private Long totalRevenue;
+    private Double totalRevenue;
 
     @Comment("전월대비매출증감율")
     private Double mom;
