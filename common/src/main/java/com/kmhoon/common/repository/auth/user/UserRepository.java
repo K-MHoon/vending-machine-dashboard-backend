@@ -16,5 +16,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.email = :email")
     Optional<User> findByEmailWithRoles(@Param("email") String email);
 
+    @Query("select distinct u " +
+            "from User u " +
+            "join fetch u.managerGroup " +
+            "where u.email = ?1")
+    Optional<User> findByEmailWithManagerGroup(String email);
+
+    boolean existsByEmail(String email);
+
     Optional<User> findByEmail(String email);
 }
