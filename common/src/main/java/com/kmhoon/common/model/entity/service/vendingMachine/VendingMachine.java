@@ -7,6 +7,7 @@ import com.kmhoon.common.model.entity.BaseEntity;
 import com.kmhoon.common.model.entity.auth.user.User;
 import com.kmhoon.common.model.entity.service.delivery.DeliveryMan;
 import com.kmhoon.common.model.entity.service.engineer.Engineer;
+import com.kmhoon.common.model.entity.service.group.ManagerGroup;
 import com.kmhoon.common.model.entity.service.vendor.Vendor;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,10 +42,10 @@ public class VendingMachine extends BaseEntity {
     private String name;
 
     @Comment("X좌표")
-    private double locationX;
+    private Double locationX;
 
     @Comment("Y좌표")
-    private double locationY;
+    private Double locationY;
 
     @Comment("주소")
     private String address;
@@ -64,6 +65,17 @@ public class VendingMachine extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_seq")
     private User manager;
+
+    @Comment("자판기 소속 그룹")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_group_seq")
+    private ManagerGroup managerGroup;
+
+    @Comment("자판기에 추가할 수 있는 최대 X개수")
+    private Long sizeX;
+
+    @Comment("자판기에 추가할 수 있는 최대 Y개수")
+    private Long sizeY;
 
     @Convert(converter = VendingMachineTypeConverter.class)
     @Builder.Default
@@ -103,7 +115,7 @@ public class VendingMachine extends BaseEntity {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
-    public void updateAll(String code, String name, double locationX, double locationY, String address, Boolean isUse, VendingMachineStatus status, List<VendingMachineType> vendingMachineTypeList, Vendor vendor, Engineer engineer, DeliveryMan deliveryMan, LocalDate nextInspectionDate) {
+    public void updateAll(String code, String name, double locationX, double locationY, String address, Boolean isUse, VendingMachineStatus status, List<VendingMachineType> vendingMachineTypeList, Vendor vendor, Engineer engineer, DeliveryMan deliveryMan, LocalDate nextInspectionDate, Long sizeX, Long sizeY) {
         this.code = code;
         this.name = name;
         this.locationX = locationX;
@@ -116,6 +128,8 @@ public class VendingMachine extends BaseEntity {
         this.engineer = engineer;
         this.deliveryMan = deliveryMan;
         this.nextInspectionDate = nextInspectionDate;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
     }
 
     public void delete() {

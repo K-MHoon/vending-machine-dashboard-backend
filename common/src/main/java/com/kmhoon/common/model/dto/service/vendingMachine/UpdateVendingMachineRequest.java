@@ -41,6 +41,12 @@ public final class UpdateVendingMachineRequest {
     private Boolean isUse;
 
     @NotNull
+    private Long sizeX;
+
+    @NotNull
+    private Long sizeY;
+
+    @NotNull
     @UniqueElements
     private List<VendingMachineType> vendingMachineTypeList = new ArrayList<>();
 

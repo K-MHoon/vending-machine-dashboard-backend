@@ -38,6 +38,12 @@ public final class CreateVendingMachineRequest {
     private Boolean isUse;
 
     @NotNull
+    private Long sizeX;
+
+    @NotNull
+    private Long sizeY;
+
+    @NotNull
     @UniqueElements
     private List<VendingMachineType> vendingMachineTypeList = new ArrayList<>();
 
