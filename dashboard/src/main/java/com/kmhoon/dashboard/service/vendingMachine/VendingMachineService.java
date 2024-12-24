@@ -2,6 +2,7 @@ package com.kmhoon.dashboard.service.vendingMachine;
 
 import com.kmhoon.common.model.dto.service.vendingMachine.CreateVendingMachineRequest;
 import com.kmhoon.common.model.dto.service.vendingMachine.UpdateVendingMachineRequest;
+import com.kmhoon.common.model.entity.auth.user.User;
 import com.kmhoon.common.model.entity.service.delivery.DeliveryMan;
 import com.kmhoon.common.model.entity.service.engineer.Engineer;
 import com.kmhoon.common.model.entity.service.vendingMachine.VendingMachine;
@@ -9,6 +10,7 @@ import com.kmhoon.common.model.entity.service.vendor.Vendor;
 import com.kmhoon.common.repository.auth.user.UserRepository;
 import com.kmhoon.common.repository.service.delivery.DeliveryManRepository;
 import com.kmhoon.common.repository.service.engineer.EngineerRepository;
+import com.kmhoon.common.repository.service.vendingMachine.VendingMachineProductMapRepository;
 import com.kmhoon.common.repository.service.vendingMachine.VendingMachineRepository;
 import com.kmhoon.common.repository.service.vendor.VendorRepository;
 import com.kmhoon.dashboard.exception.DashboardApiException;
@@ -50,14 +52,20 @@ public class VendingMachineService {
                 .isUse(request.getIsUse())
                 .isDelete(Boolean.FALSE)
                 .vendingMachineTypeList(request.getVendingMachineTypeList())
-                .manager(userRepository.findByEmail(SecurityUtils.getLoggedInUserId()).orElseThrow(() -> new DashboardApiException(MANAGER_SEQ_NOT_FOUND)))
+                .manager(getManagerByLoggedInUser())
                 .vendor(getVendor(request.getVendorSeq()))
                 .engineer(getEngineer(request.getEngineerSeq()))
                 .deliveryMan(getDeliveryMan(request.getDeliveryManSeq()))
                 .nextInspectionDate(getNextInspectionDate(request.getNextInspectionDate()))
+                .sizeX(request.getSizeX())
+                .sizeY(request.getSizeY())
                 .build();
 
         vendingMachineRepository.save(newVendingMachine);
+    }
+
+    private User getManagerByLoggedInUser() {
+        return userRepository.findByEmail(SecurityUtils.getLoggedInUserId()).orElseThrow(() -> new DashboardApiException(MANAGER_SEQ_NOT_FOUND));
     }
 
     @Transactional
@@ -79,11 +87,14 @@ public class VendingMachineService {
                 getVendor(request.getVendorSeq()),
                 getEngineer(request.getEngineerSeq()),
                 getDeliveryMan(request.getDeliveryManSeq()),
-                getNextInspectionDate(request.getNextInspectionDate()));
+                getNextInspectionDate(request.getNextInspectionDate()),
+                request.getSizeX(),
+                request.getSizeY()
+        );
     }
 
     private VendingMachine getVendingMachineBySeq(Long seq) {
-        return vendingMachineRepository.findBySequenceAndIsDeleteIsFalse(seq).orElseThrow(() -> new DashboardApiException(VENDING_MACHINE_NOT_FOUND));
+        return vendingMachineRepository.findBySequenceAndIsDeleteIsFalseAndManagerGroup(seq,getManagerByLoggedInUser().getManagerGroup()).orElseThrow(() -> new DashboardApiException(VENDING_MACHINE_NOT_FOUND));
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.kmhoon.common.repository.service.vendingMachine;
 
+import com.kmhoon.common.model.entity.service.group.ManagerGroup;
 import com.kmhoon.common.model.entity.service.vendingMachine.VendingMachine;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,5 +10,5 @@ public interface VendingMachineRepository extends JpaRepository<VendingMachine, 
 
     boolean existsByCode(String code);
     boolean existsByCodeAndIsDeleteIsFalse(String code);
-    Optional<VendingMachine> findBySequenceAndIsDeleteIsFalse(Long seq);
+    Optional<VendingMachine> findBySequenceAndIsDeleteIsFalseAndManagerGroup(Long seq, ManagerGroup managerGroup);
 }
