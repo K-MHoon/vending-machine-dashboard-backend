@@ -1,6 +1,7 @@
 package com.kmhoon.common.repository.auth.user;
 
 import com.kmhoon.common.model.entity.auth.user.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
+    @EntityGraph(attributePaths = {"managerGroup"})
     Optional<User> findByEmail(String email);
 }

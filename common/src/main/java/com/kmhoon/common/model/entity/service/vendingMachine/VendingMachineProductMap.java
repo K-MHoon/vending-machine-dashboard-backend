@@ -29,7 +29,7 @@ public class VendingMachineProductMap {
     private String code;
 
     @Comment("판매가격")
-    private long price;
+    private Long price;
 
     @Comment("현재상태")
     @Enumerated(EnumType.STRING)
@@ -37,6 +37,15 @@ public class VendingMachineProductMap {
 
     @Comment("바코드")
     private String barcode;
+
+    @Comment("자판기상의 위치 X좌표")
+    private Long locationX;
+
+    @Comment("자판기상의 위치 Y좌표")
+    private Long locationY;
+
+    @Comment("사용여부")
+    private Boolean isUse;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_seq")
